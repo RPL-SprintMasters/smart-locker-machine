@@ -51,7 +51,7 @@ const OnValidate = async (numberLoker:String) => {
         </div>
         <div className='text-center flex flex-col p-10 gap-4'>
           <p>Please Scan Correct Qr Code</p>
-          <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={handleRetry}><p>Tap To Retry</p></button>
+          <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={handleRetry}><p>Tap To Retry!</p></button>
         </div>
     </div> 
   }
