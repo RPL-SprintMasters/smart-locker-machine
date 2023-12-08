@@ -1,113 +1,127 @@
+"use client"
 import Image from 'next/image'
+import React, { useState } from 'react';
+import { QrReader } from "react-qr-reader";
+import SuccessIcon from "../assets/success-icon.png"
+import axios from 'axios';
+import { error } from 'console';
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+type responseAPI = {
+  success: boolean,
+  message: string
 }
+export default function Home() {
+  const [isCameraActive, setCameraActive] = useState(true);
+  const [qrCodeResult, setQrCodeResult] = useState(null);
+  const [responseStatus, setResponseStatus] = useState(false);        //untuk 
+  const [response, setResponse] = useState<responseAPI|null>(null);
+  const [activeCard, setAcvtiveCard] = useState<boolean>(false)
+
+const OnValidate = async (numberLoker:String) => {
+  try {
+    const res =  await axios.post("https://sprintmasters.up.railway.app/api/from-machine/",{
+      "code_loker": numberLoker
+      }).then((result) => {
+        return {
+          error: false,
+          success: result.data.success,
+          message:result.data.message
+        }
+      })
+
+    if(!res?.error){
+      setResponseStatus(true)
+      setAcvtiveCard(!activeCard);
+      setResponse(res);
+    } else {
+      setResponseStatus(false)
+    }
+  } catch (error) {
+    setResponseStatus(false)
+  }
+}
+
+  const failedCard = () => {
+    return <div className='w-[400px] bg-white drop-shadow-md flex flex-col rounded-3xl relative'>
+        <div className='absolute flex w-full justify-center'>
+          <Image src={SuccessIcon} alt='success-icon' className='h-24 w-24 -m-16 justify-self-center'/>
+        </div>
+        <div className="bg-[#FC2E20] px-10  py-5 rounded-t-3xl text-center">
+          <p className='mt-8 text-xl text-white font-medium'>Failed To Scan</p>
+        </div>
+        <div className='text-center flex flex-col p-10 gap-4'>
+          <p>Please Scan Correct Qr Code</p>
+          <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={handleRetry}><p>Tap To Retry</p></button>
+        </div>
+    </div> 
+  }
+
+  const responseCard =  () => {
+      return <div className='w-[400px] bg-white drop-shadow-md flex flex-col rounded-3xl relative'>
+        <div className='absolute flex w-full justify-center'>
+          <Image src={SuccessIcon} alt='success-icon' className='h-24 w-24 -m-16 justify-self-center'/>
+        </div>
+        <div className="bg-[#4EC33D] px-10  py-5 rounded-t-3xl text-center">
+          <p className='mt-8 text-xl text-white font-medium'>Success Scan Barcode</p>
+        </div>
+        <div className='text-center flex flex-col p-10'>
+          <p>Your Number Locker</p>
+          <p className='text-[150px] font-bold'>1</p>
+          <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={handleRetry}><p>Tap To Done</p></button>
+        </div>
+    </div>
+  }
+
+  const handleScan = (result:any) => {
+    if (result && isCameraActive) {
+      setQrCodeResult(result);
+      setCameraActive(false); 
+    }
+  };
+
+  const handleError = (error:any) => {
+  };
+
+  const handleRetry = () => {
+    setResponse(null)
+    setAcvtiveCard(false)
+    setResponse(null)
+    setCameraActive(true); 
+    setQrCodeResult(null);
+  };
+
+  return (
+    <div className='w-screen min-h-screen flex flex-col justify-center items-center p-10'>
+      {isCameraActive && (
+        <div className='gap-10 flex flex-col'>
+              <p className='text-center text-xl font-bold'> Scan Your QR</p>
+              <div className='h-96 w-96 bg-black overflow-hidden rounded-2xl'>
+              <QrReader
+                scanDelay={false}
+                className='scale-[1.5]'
+                onResult={handleScan}
+                onError={(error:any) => handleError(error)}
+                constraints  ={{ facingMode:  "environment"  }}
+                />
+            </div>
+        </div> 
+      )}
+
+      {qrCodeResult && !activeCard &&(
+        <div className='p-10 bg-white drop-shadow-md rounded-xl flex flex-col gap-10'>
+          <Image src={SuccessIcon} alt='success-icon'/>
+          <p>Your Code Success to Read</p>
+          <button className='p-3 bg-black text-white' onClick={() =>OnValidate(qrCodeResult.text)}>Open Locker</button>
+        </div> 
+      )}
+
+      {qrCodeResult && activeCard && (
+        <div>
+          {response?.success && responseStatus ? responseCard():failedCard()}
+        </div>
+      ) }
+    </div>
+  );
+}
+
+
