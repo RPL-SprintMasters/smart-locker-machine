@@ -132,10 +132,9 @@ const OnValidate = async (numberLoker:String) => {
               <p className='text-center text-xl font-bold'> Scan Your QR</p>
               <div className='h-96 w-96 bg-black overflow-hidden rounded-2xl'>
               <QrReader
-                scanDelay={false}
+                scanDelay={100}
                 className='scale-[1.5]'
                 onResult={handleScan}
-                onError={(error:any) => handleError(error)}
                 constraints  ={{ facingMode:  "environment"  }}
                 />
             </div>
