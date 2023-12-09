@@ -98,7 +98,7 @@ const OnValidate = async (numberLoker:String) => {
         </div>
         <div className='text-center flex flex-col p-10'>
           <p>Your Number Locker</p>
-          <p className='text-[150px] font-bold'>1</p>
+          <p className='text-[150px] font-bold'>{response?.no_loker}</p>
           <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={handleRetry}><p>Tap To Done</p></button>
         </div>
     </div>
