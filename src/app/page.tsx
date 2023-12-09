@@ -18,7 +18,7 @@ type responseAPI = {
 
 export default function Home() {
   const [isCameraActive, setCameraActive] = useState(true);
-  const [qrCodeResult, setQrCodeResult] = useState<string|null>(null);
+  const [qrCodeResult, setQrCodeResult] = useState<any|null>(null);
   const [responseStatus, setResponseStatus] = useState(false);        //untuk 
   const [response, setResponse] = useState<responseAPI|null>(null);
   const [activeCard, setAcvtiveCard] = useState<boolean>(false)
