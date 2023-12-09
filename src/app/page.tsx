@@ -1,66 +1,98 @@
 "use client"
 import Image from 'next/image'
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { QrReader } from "react-qr-reader";
-import SuccessIcon from "../assets/success-icon.png"
+import { useRouter } from 'next/navigation'
+
+import SuccessIcon from "../assets/success-line.png"
+import FailedIcon from "../assets/failed-icon.png"
+
+
 import axios from 'axios';
-import { error } from 'console';
 
 type responseAPI = {
   success: boolean,
-  message: string
+  message: string,
+  no_loker: string
 }
+
 export default function Home() {
   const [isCameraActive, setCameraActive] = useState(true);
-  const [qrCodeResult, setQrCodeResult] = useState(null);
+  const [qrCodeResult, setQrCodeResult] = useState<string|null>(null);
   const [responseStatus, setResponseStatus] = useState(false);        //untuk 
   const [response, setResponse] = useState<responseAPI|null>(null);
   const [activeCard, setAcvtiveCard] = useState<boolean>(false)
 
 const OnValidate = async (numberLoker:String) => {
-  try {
-    const res =  await axios.post("https://sprintmasters.up.railway.app/api/from-machine/",{
+    const res  =  await axios.post(`https://sprintmasters.up.railway.app/api/from-machine/`,{
       "code_loker": numberLoker
       }).then((result) => {
         return {
           error: false,
           success: result.data.success,
-          message:result.data.message
+          message:result.data.message,
+          no_loker:result.data.no_loker
+        }
+      }).catch((error:any)=> {
+        return {
+          error: true,
+          success: error.response.data.success,
+          message:error.response.data.message,
+          no_loker:error.response.data.no_loker
         }
       })
 
     if(!res?.error){
+      setResponse({
+        success: res.success,
+        message: res.message,
+        no_loker: res.no_loker
+      });
       setResponseStatus(true)
-      setAcvtiveCard(!activeCard);
-      setResponse(res);
     } else {
-      setResponseStatus(false)
+      setResponse({
+        success: res.success,
+        message: res.message,
+        no_loker: res.no_loker
+      });
+      setResponseStatus(true)
     }
-  } catch (error) {
-    setResponseStatus(false)
-  }
+
+    setAcvtiveCard(true)
+  
 }
 
   const failedCard = () => {
     return <div className='w-[400px] bg-white drop-shadow-md flex flex-col rounded-3xl relative'>
         <div className='absolute flex w-full justify-center'>
-          <Image src={SuccessIcon} alt='success-icon' className='h-24 w-24 -m-16 justify-self-center'/>
-        </div>
+        <div className='-mt-14 relative z-0'>
+              <span className="relative flex h-20 w-20">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full  bg-[#940000] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-20 w-20 bg-[#940000]"></span>
+              </span>
+              <Image src={FailedIcon} alt='success-icon' className=' relative z-100 h-8 w-8 -mt-14 justify-self-center mx-auto'/>
+            </div>        
+          </div>
         <div className="bg-[#FC2E20] px-10  py-5 rounded-t-3xl text-center">
           <p className='mt-8 text-xl text-white font-medium'>Failed To Scan</p>
         </div>
         <div className='text-center flex flex-col p-10 gap-4'>
-          <p>Please Scan Correct Qr Code</p>
+          <p className='py-5'>{response?.message}</p>
           <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={handleRetry}><p>Tap To Retry!</p></button>
         </div>
     </div> 
   }
 
-  const responseCard =  () => {
+  const successCard =  () => {
       return <div className='w-[400px] bg-white drop-shadow-md flex flex-col rounded-3xl relative'>
         <div className='absolute flex w-full justify-center'>
-          <Image src={SuccessIcon} alt='success-icon' className='h-24 w-24 -m-16 justify-self-center'/>
-        </div>
+        <div className='-mt-14 relative z-0'>
+              <span className="relative flex h-20 w-20">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-20 w-20 bg-[#2C7721]"></span>
+              </span>
+              <Image src={SuccessIcon} alt='success-icon' className=' relative z-100 h-8 w-8 -mt-14 justify-self-center mx-auto'/>
+            </div>        </div>
         <div className="bg-[#4EC33D] px-10  py-5 rounded-t-3xl text-center">
           <p className='mt-8 text-xl text-white font-medium'>Success Scan Barcode</p>
         </div>
@@ -77,18 +109,21 @@ const OnValidate = async (numberLoker:String) => {
       setQrCodeResult(result);
       setCameraActive(false); 
     }
+  
+
   };
 
   const handleError = (error:any) => {
   };
 
   const handleRetry = () => {
-    setResponse(null)
     setAcvtiveCard(false)
+    setResponseStatus(false)
     setResponse(null)
-    setCameraActive(true); 
     setQrCodeResult(null);
+    setCameraActive(true); 
   };
+
 
   return (
     <div className='w-screen min-h-screen flex flex-col justify-center items-center p-10'>
@@ -108,16 +143,30 @@ const OnValidate = async (numberLoker:String) => {
       )}
 
       {qrCodeResult && !activeCard &&(
-        <div className='p-10 bg-white drop-shadow-md rounded-xl flex flex-col gap-10'>
-          <Image src={SuccessIcon} alt='success-icon'/>
-          <p>Your Code Success to Read</p>
-          <button className='p-3 bg-black text-white' onClick={() =>OnValidate(qrCodeResult.text)}>Open Locker</button>
-        </div> 
+
+          <div className='w-[400px] bg-white drop-shadow-md flex flex-col rounded-3xl relative'>
+          <div className='absolute flex w-full justify-center'>
+            {/* <Image src={SuccessIcon} alt='success-icon' className='h-24 w-24 -m-16 justify-self-center'/> */}
+           <div className='-mt-14 relative z-0'>
+              <span className="relative flex h-20 w-20">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-20 w-20 bg-[#2A72C3]"></span>
+              </span>
+              <Image src={SuccessIcon} alt='success-icon' className=' relative z-100 h-8 w-8 -mt-14 justify-self-center mx-auto'/>
+            </div>
+          </div>
+          <div className="bg-[#65ACF0] px-10  py-5 rounded-t-3xl text-center">
+            <p className='mt-8 text-xl text-white font-medium'>Your Code Success to Read</p>
+          </div>
+          <div className='text-center flex flex-col p-10'>
+            <button className='p-3 bg-[#F9943B] rounded-xl font-medium' onClick={() =>{OnValidate(qrCodeResult.text)}}><p>Tap To Open Locker</p></button>
+          </div>
+          </div>
       )}
 
       {qrCodeResult && activeCard && (
         <div>
-          {response?.success && responseStatus ? responseCard():failedCard()}
+          {response?.success && responseStatus ? successCard():failedCard()}
         </div>
       ) }
     </div>
